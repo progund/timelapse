@@ -56,7 +56,7 @@ setup_daily()
 {
     find_images "${Y_YEAR}-${Y_MONTH}-${Y_DAY}*.jpg"
 
-    FPS=60
+    FPS=10
     VIDEO_DIR=$WWW_DEST_DIR/videos/$YEAR/$MONTH/
     VIDEO_FILE=timelapse-$DAY.avi
 }
@@ -67,7 +67,7 @@ setup_monthly()
 
     check_image_count
     
-    FPS=60
+    FPS=10
     VIDEO_DIR=$WWW_DEST_DIR/videos/$YEAR/
     VIDEO_FILE=timelapse-$MONTH.avi
 }
@@ -78,7 +78,7 @@ setup_yearly()
 
     check_image_count
 
-    FPS=60
+    FPS=10
     VIDEO_DIR=$WWW_DEST_DIR/videos/
     VIDEO_FILE=timelapse-$YEAR.avi
 }
