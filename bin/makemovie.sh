@@ -42,21 +42,27 @@ check_image_count()
     fi
 }
 
-setup_daily()
+
+find_images()
 {
-    find $LOCAL_DIR/ -name "${Y_YEAR}-${Y_MONTH}-${Y_DAY}*.jpg"  | sort -u > $TMP_FILE
+    find $LOCAL_DIR/ -name "${1}"  | sort -u > $TMP_FILE
     exit_on_error $? ": finding photos"
 
     check_image_count
-    
+    echo "REGEXP '$1' => $IMAGE_CNT photos"    
+}
+
+setup_daily()
+{
+    find_images "${Y_YEAR}-${Y_MONTH}-${Y_DAY}*.jpg"
+
     VIDEO_DIR=$WWW_DEST_DIR/videos/$YEAR/$MONTH/
     VIDEO_FILE=timelapse-$DAY.avi
 }
 
 setup_monthly()
 {
-    find $LOCAL_DIR/ -name "${Y_YEAR}-${Y_MONTH}*.jpg"  | sort -u > $TMP_FILE
-    exit_on_error $? ": finding photos"
+    find_images "${Y_YEAR}-${Y_MONTH}*.jpg" 
 
     check_image_count
     
@@ -66,8 +72,7 @@ setup_monthly()
 
 setup_yearly()
 {
-    find $LOCAL_DIR/ -name "${Y_YEAR}-*_12-00.jpg"  | sort -u > $TMP_FILE
-    exit_on_error $? ": finding photos"
+    find_images "${Y_YEAR}-*_12-00.jpg"  
 
     check_image_count
 
