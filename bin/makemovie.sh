@@ -34,7 +34,7 @@ check_image_count()
 {
     IMAGE_CNT=$(wc -l $TMP_FILE | awk '{print $1}')
     
-    if [ "" = "0" ]
+    if [ "$IMAGE_CNT" = "0" ]
     then
 	echo "Missing videos from $Y_YEAR $Y_MONTH $Y_DAY"
 	
