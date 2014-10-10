@@ -1,34 +1,18 @@
 #!/bin/sh
 
-DEST_DIR_BASE=/media/camera-disk/
-WIDTH="2592"
-HEIGHT="1944"
-LOG_FILE=$DEST_DIR_BASE/timelapse.log
-DAYS_OLD_WHEN_REMOVED=30
+FUNCTIONS=$(dirname $0)/functions
+if [ ! -f $FUNCTIONS ]
+then
+    echo "Can't find functions file: $FUNCTIONS"
+    exit 2
+else
+    . $FUNCTIONS
+fi
 
 
-YEAR=$(date +"%Y")
-MONTH=$(date +"%m")
-DEST_DIR=$DEST_DIR_BASE/$YEAR/$MONTH
-DATE=$(date +"%Y-%m-%d_%H-%M")
 
 PREVENT_REMOVAL="false"
 
-if [ ! -d $DEST_DIR ]
-then
-    mkdir -p $DEST_DIR 
-    RET=$?
-    if [ "$RET" != "0" ]
-	then
-	echo "Failed creating dir...."
-	exit $RET
-    fi
-fi
-
-log()
-{
-    echo "[$(date)]   $*" >> $LOG_FILE
-}
 
 
 #
@@ -36,7 +20,7 @@ log()
 #
 clean_up_old_dirs() 
 {
-    for i in $(find ${DEST_DIR_BASE} -mtime +${DAYS_OLD_WHEN_REMOVED} -type d)
+    for i in $(find ${CAM_DEST_DIR_BASE} -mtime +${DAYS_OLD_WHEN_REMOVED} -type d)
     do
 	log   "  * removing files and dirs dir $i"
 
@@ -53,9 +37,23 @@ clean_up_old_dirs()
 
 
 
+read_conf_file $1
+shift
+if [ ! -d $CAM_DEST_DIR ]
+then
+    mkdir -p $CAM_DEST_DIR 
+    RET=$?
+    if [ "$RET" != "0" ]
+	then
+	echo "Failed creating dir...."
+	exit $RET
+    fi
+fi
+
+
 clean_up_old_dirs
 
-PHOTO_NAME=$DEST_DIR/$DATE.jpg
+PHOTO_NAME=$CAM_DEST_DIR/$DATE.jpg
 log "Photo: $PHOTO_NAME [${WIDTH}x${HEIGHT}]"
 raspistill  -w $WIDTH -h $HEIGHT -o $PHOTO_NAME
 RET=$?

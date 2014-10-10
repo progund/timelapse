@@ -1,27 +1,14 @@
 #!/bin/bash
 
-REMOTE_HOST=129.16.213.181
-REMOTE_USER=pi
-REMOTE_DIR=/media/camera-disk/
-
-LOCAL_DIR=/home/hesa/tmp/camera-disk
-
-TMP_FILE=/tmp/$$.txt
-
-exit_on_error()
-{
-    if [ "$1" != "0" ]
-	then
-	echo "Failure $2"
-	exit $1
-    fi
-}
-
-if [ ! -d $LOCAL_DIR ]
+FUNCTIONS=$(dirname $0)/functions
+if [ ! -f $FUNCTIONS ] 
 then
-    mkdir -p $LOCAL_DIR 
-    exit_on_error $? ": mkdir $LOCAL_DIR"
+    echo "Can't find functions file: $FUNCTIONS"
+    exit 2
+else
+    . $FUNCTIONS
 fi
+
 
 get_images() 
 {
@@ -29,27 +16,11 @@ get_images()
     exit_on_error $? ": rsync"
 }
 
-generate_video()
-{
-    find $LOCAL_DIR/ -name "*.jpg"  | sort -u > $TMP_FILE
-    exit_on_error $? ": finding photos"
-    
-     mencoder -nosound -ovc lavc -lavcopts vcodec=mpeg4:aspect=16/9:vbitrate=8000000 -vf scale=1920:1080 -o $LOCAL_DIR/timelapse.avi -mf type=jpeg:fps=4 mf://@${TMP_FILE}
-    exit_on_error $? ": generating video"
+read_conf_file $1
+shift
 
-    rm ${TMP_FILE}
-}
+init_sync_host
+get_images
 
-
-if [ "$1" = "--get" ]
-then
-    get_images
-elif [ "$1" = "--gen" ]
-then
-    generate_video
-else
-    get_images
-    generate_video
-fi
 
 
