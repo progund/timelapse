@@ -58,7 +58,8 @@ setup_daily()
 
     FPS=10
     VIDEO_DIR=$WWW_DEST_DIR/videos/$YEAR/$MONTH/
-    VIDEO_FILE=timelapse-$DAY.avi
+    VIDEO_FILE=daily-$DAY.avi
+    REM_REGEXP="daily-*.avi"
 }
 
 setup_monthly()
@@ -69,7 +70,8 @@ setup_monthly()
     
     FPS=10
     VIDEO_DIR=$WWW_DEST_DIR/videos/$YEAR/
-    VIDEO_FILE=timelapse-$MONTH.avi
+    VIDEO_FILE=monthly-$MONTH.avi
+    REM_REGEXP="monthly-*.avi"
 }
 
 setup_yearly()
@@ -80,7 +82,8 @@ setup_yearly()
 
     FPS=10
     VIDEO_DIR=$WWW_DEST_DIR/videos/
-    VIDEO_FILE=timelapse-$YEAR.avi
+    VIDEO_FILE=yearly-$YEAR.avi
+    REM_REGEXP="yearly-*.avi"
 }
 
 Y_YEAR=$(date +"%Y" -d "yesterday")
@@ -100,5 +103,12 @@ case "$1" in
 esac
 
 generate_video
+LATEST_DIR=$VIDEO_DIR/latest
+if [ ! -d $LATEST_DIR ]
+then
+    mkdir -p $LATEST_DIR
+fi
 
+rm -f $LATEST_DIR/$REM_REGEXP
+ln -s $VIDEO_DIR/$VIDEO_FILE $LATEST_DIR/
 
