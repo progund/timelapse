@@ -1,0 +1,34 @@
+read_conf_file()
+{
+    FILE="$1"
+    if [ ! -f $FILE ] || [ "$FILE" = "" ]
+    then
+	echo "Missing configuration file"
+	exit 1
+    else
+	. $FILE
+    fi
+}
+
+log()
+{
+    echo "[$(date)]   $*" >> $LOG_FILE
+}
+
+exit_on_error()
+{
+    if [ "$1" != "0" ]
+	then
+	echo "Failure $2"
+	exit $1
+    fi
+}
+
+init_sync_host()
+{
+    if [ ! -d $LOCAL_DIR ]
+    then
+	mkdir -p $LOCAL_DIR 
+	exit_on_error $? ": mkdir $LOCAL_DIR"
+    fi
+}
