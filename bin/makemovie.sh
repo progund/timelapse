@@ -58,7 +58,7 @@ setup_daily()
 
     FPS=10
     VIDEO_DIR=$WWW_DEST_DIR/videos/$YEAR/$MONTH/
-    VIDEO_FILE=daily-$DAY.avi
+    VIDEO_FILE=daily-$YEAR-$MONTH-$DAY.avi
     REM_REGEXP="daily-*.avi"
 }
 
@@ -70,7 +70,7 @@ setup_monthly()
     
     FPS=10
     VIDEO_DIR=$WWW_DEST_DIR/videos/$YEAR/
-    VIDEO_FILE=monthly-$MONTH.avi
+    VIDEO_FILE=monthly-$YEAR-$MONTH.avi
     REM_REGEXP="monthly-*.avi"
 }
 
@@ -103,7 +103,7 @@ case "$1" in
 esac
 
 generate_video
-LATEST_DIR=$VIDEO_DIR/latest
+LATEST_DIR=$WWW_DEST_DIR/videos/latest                                                                  
 if [ ! -d $LATEST_DIR ]
 then
     mkdir -p $LATEST_DIR
