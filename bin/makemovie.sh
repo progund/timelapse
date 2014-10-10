@@ -18,7 +18,7 @@ generate_video()
 #    cat ${TMP_FILE} 
 #exit
 
-    mencoder -nosound -ovc lavc -lavcopts vcodec=mpeg4:aspect=16/9:vbitrate=8000000 -vf scale=1920:1080 -o $VIDEO_DIR/$VIDEO_FILE -mf type=jpeg:fps=4 mf://@${TMP_FILE}
+    mencoder -nosound -ovc lavc -lavcopts vcodec=mpeg4:aspect=16/9:vbitrate=8000000 -vf scale=1920:1080 -o $VIDEO_DIR/$VIDEO_FILE -mf type=jpeg:fps=${FPS} mf://@${TMP_FILE}
     exit_on_error $? ": generating video"
 
 
@@ -56,6 +56,7 @@ setup_daily()
 {
     find_images "${Y_YEAR}-${Y_MONTH}-${Y_DAY}*.jpg"
 
+    FPS=60
     VIDEO_DIR=$WWW_DEST_DIR/videos/$YEAR/$MONTH/
     VIDEO_FILE=timelapse-$DAY.avi
 }
@@ -66,6 +67,7 @@ setup_monthly()
 
     check_image_count
     
+    FPS=60
     VIDEO_DIR=$WWW_DEST_DIR/videos/$YEAR/
     VIDEO_FILE=timelapse-$MONTH.avi
 }
@@ -76,6 +78,7 @@ setup_yearly()
 
     check_image_count
 
+    FPS=60
     VIDEO_DIR=$WWW_DEST_DIR/videos/
     VIDEO_FILE=timelapse-$YEAR.avi
 }
