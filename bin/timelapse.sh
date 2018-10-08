@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 FUNCTIONS=$(dirname $0)/functions
 if [ ! -f $FUNCTIONS ]
